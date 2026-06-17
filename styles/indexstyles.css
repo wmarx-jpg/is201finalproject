@@ -1,3 +1,43 @@
 body{
-    background-color: yellow;
+    background-color:white;
+}
+
+.title{
+    position:relative;
+    color:black;
+}
+.first-paragraph{
+    position:relative;
+    color:red;
+    font-family:'Courier New', Courier, monospace;
+}
+
+.reasons{
+    position:relative;
+    color:red;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.second-paragraph{
+    position:relative;
+    color:red;
+    font-family:'Courier New', Courier, monospace;
+}
+
+.third-paragraph{
+    position:relative;
+    color:red;
+    font-family:'Courier New', Courier, monospace;
+}
+
+.fourth-paragraph{
+    position:relative;
+    color:red;
+    font-family:'Courier New', Courier, monospace;
+}
+
+.fifth-paragraph{
+    position:relative;
+    color:red;
+    font-family:'Courier New', Courier, monospace;
 }
