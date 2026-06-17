@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Pink Snake 198X</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #1a0011;       /* Dark pink-tinted background */
+            --screen-color: #26001b;   /* Deep magenta screen background */
+            --snake-color: #ff007f;    /* Neon Pink Snake */
+            --apple-color: #00ffff;    /* Electric Cyan Apple (Swapped for contrast) */
+            --hawk-color: #ffea00;     /* Laser Yellow Hawk */
+            --text-color: #ff66cc;     /* Classic Hot Pink Text */
+            --border-color: #ff00ab;   /* Intense Pink Neon Border */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Press Start 2P', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            /* Scanline effect simulation */
+            background: linear-gradient(rgba(26, 0, 17, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 127, 0.06), rgba(0, 255, 255, 0.02), rgba(255, 0, 171, 0.06));
+            background-size: 100% 4px, 6px 100%;
+        }
+
+        /* 1980s Console Cabinet Wrapper */
+        #arcade-container {
+            display: flex;
+            background: #3a0026;
+            padding: 30px;
+            border: 8px solid #5e003e;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 0, 127, 0.5), inset 0 0 20px rgba(0,0,0,0.9);
+        }
+
+        /* Left Sidebar for Scores & Legend */
+        #sidebar {
+            width: 180px;
+            margin-right: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 4px dashed var(--border-color);
+            padding-right: 20px;
+        }
+
+        .hud-box {
+            margin-bottom: 30px;
+        }
+
+        .hud-title {
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: #ffb3df;
+        }
+
+        .hud-value {
+            font-size: 20px;
+            color: var(--text-color);
+            text-shadow: 0 0 8px var(--text-color);
+        }
+
+        .legend-item {
+            font-size: 10px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 10px;
+            border-radius: 3px;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        /* CRT Screen */
+        #screen-wrapper {
+            position: relative;
+            background: var(--screen-color);
+            border: 6px solid var(--border-color);
+            box-shadow: 0 0 25px var(--border-color);
+            padding: 5px;
+        }
+
+        canvas {
+            background-color: #12000d;
+            display: block;
+        }
+
+        /* Screen Overlays (Win/Loss/Start) */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 0, 13, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        .overlay h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .overlay p {
+            font-size: 10px;
+            color: #fff;
+            line-height: 1.8;
+        }
+
+        .blink {
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="arcade-container">
+    <div id="sidebar">
+        <div>
+            <div class="hud-box">
+                <div class="hud-title">SCORE</div>
+                <div id="score" class="hud-value">00</div>
+            </div>
+            <div class="hud-box">
+                <div class="hud-title">TARGET</div>
+                <div class="hud-value" style="color: #ffffff; text-shadow: 0 0 8px #fff;">10</div>
+            </div>
+            <div class="hud-box">
+                <div class="hud-title">SPEED</div>
+                <div id="speed-lvl" class="hud-value">1X</div>
+            </div>
+        </div>
+
+        <div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--snake-color);"></div>
+                <span>SNAKE</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--apple-color);"></div>
+                <span>APPLE (+1)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--hawk-color); border-radius: 50%;"></div>
+                <span>HAWK (BAD)</span>
+            </div>
+            <p style="font-size: 8px; color: #ff99dd; line-height: 1.4; margin-top: 20px;">USE ARROWS TO TURN</p>
+        </div>
+    </div>
+
+    <div id="screen-wrapper">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+        <div id="start-screen" class="overlay">
+            <h1 style="color: var(--snake-color);">SNAKE 198X</h1>
+            <p class="blink" style="color: #ff99dd;">PRESS ANY ARROW KEY<br>TO INSERT COIN & PLAY</p>
+        </div>
+
+        <div id="gameover-screen" class="overlay" style="display: none;">
+            <h1 style="color: #ff0055;">GAME OVER</h1>
+            <p id="fail-reason" style="margin-bottom: 20px; color: #ffb3df;"></p>
+            <p class="blink">PRESS SPACEBAR TO RESTART</p>
+        </div>
+
+        <div id="victory-screen" class="overlay" style="display: none;">
+            <h1 style="color: #ffffff; text-shadow: 0 0 15px #ff007f;" class="blink">YOU WIN!</h1>
+            <p style="color: var(--snake-color); margin-bottom: 20px;">10 POINTS ACHIEVED!<br>PINK ARCADE CHAMPION</p>
+            <p>PRESS SPACEBAR TO REPLAY</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const gridSize = 20;
+    const tileCount = canvas.width / gridSize;
+
+    let snake = [];
+    let dx = 0;
+    let dy = 0;
+    let apple = { x: 0, y: 0 };
+    let hawk = { x: 0, y: 0, dx: 1, dy: 0 }; 
+    let score = 0;
+    let baseSpeed = 160; 
+    let currentSpeed = baseSpeed;
+    let gameInterval = null;
+    let gameStarted = false;
+    let gameOverState = false;
+
+    const scoreDisplay = document.getElementById("score");
+    const speedDisplay = document.getElementById("speed-lvl");
+    const startScreen = document.getElementById("start-screen");
+    const gameoverScreen = document.getElementById("gameover-screen");
+    const victoryScreen = document.getElementById("victory-screen");
+    const failReason = document.getElementById("fail-reason");
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    resetGame();
+
+    function resetGame() {
+        snake = [
+            { x: 10, y: 10 },
+            { x: 9, y: 10 },
+            { x: 8, y: 10 }
+        ];
+        dx = 0;
+        dy = 0;
+        score = 0;
+        currentSpeed = baseSpeed;
+        scoreDisplay.innerText = "00";
+        speedDisplay.innerText = "1X";
+        
+        spawnApple();
+        spawnHawk();
+        
+        gameoverScreen.style.display = "none";
+        victoryScreen.style.display = "none";
+        
+        if (gameInterval) clearInterval(gameInterval);
+        gameInterval = setInterval(gameLoop, currentSpeed);
+    }
+
+    function gameLoop() {
+        if (!gameStarted || gameOverState) {
+            drawElements();
+            return;
+        }
+
+        moveSnake();
+        if (checkCollision()) return;
+
+        moveHawk();
+        if (checkHawkCollision()) return;
+
+        checkAppleEat();
+        drawElements();
+    }
+
+    function moveSnake() {
+        const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+        snake.unshift(head);
+        snake.pop(); 
+    }
+
+    function moveHawk() {
+        if (Math.random() < 0.15) { 
+            const dirs = [{x:1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:-1}];
+            const randomDir = dirs[Math.floor(Math.random() * dirs.length)];
+            hawk.dx = randomDir.x;
+            hawk.dy = randomDir.y;
+        }
+
+        hawk.x += hawk.dx;
+        hawk.y += hawk.dy;
+
+        if (hawk.x < 0) hawk.x = tileCount - 1;
+        if (hawk.x >= tileCount) hawk.x = 0;
+        if (hawk.y < 0) hawk.y = tileCount - 1;
+        if (hawk.y >= tileCount) hawk.y = 0;
+    }
+
+    function checkCollision() {
+        const head = snake[0];
+
+        if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+            triggerGameOver("CRASHED INTO THE WALL");
+            return true;
+        }
+
+        for (let i = 1; i < snake.length; i++) {
+            if (head.x === snake[i].x && head.y === snake[i].y) {
+                triggerGameOver("BIT YOUR OWN TAIL");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function checkHawkCollision() {
+        const head = snake[0];
+        
+        if (head.x === hawk.x && head.y === hawk.y) {
+            triggerGameOver("EATEN BY A HAWK!");
+            return true;
+        }
+
+        for (let i = 1; i < snake.length; i++) {
+            if (snake[i].x === hawk.x && snake[i].y === hawk.y) {
+                triggerGameOver("THE HAWK SWOOPED YOU!");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function checkAppleEat() {
+        const head = snake[0];
+        if (head.x === apple.x && head.y === apple.y) {
+            score++;
+            scoreDisplay.innerText = score < 10 ? "0" + score : score;
+
+            if (score >= 10) {
+                triggerVictory();
+                return;
+            }
+
+            const tailCopy = { ...snake[snake.length - 1] };
+            snake.push(tailCopy);
+
+            spawnApple();
+            
+            currentSpeed = baseSpeed - (score * 12);
+            let speedMultiplier = (baseSpeed / currentSpeed).toFixed(1);
+            speedDisplay.innerText = speedMultiplier + "X";
+
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, currentSpeed);
+        }
+    }
+
+    function spawnApple() {
+        apple.x = Math.floor(Math.random() * tileCount);
+        apple.y = Math.floor(Math.random() * tileCount);
+
+        for (let part of snake) {
+            if (part.x === apple.x && part.y === apple.y) {
+                spawnApple();
+                break;
+            }
+        }
+    }
+
+    function spawnHawk() {
+        hawk.x = Math.floor(Math.random() * tileCount);
+        hawk.y = Math.floor(Math.random() * tileCount);
+
+        if (Math.abs(hawk.x - 10) < 4 && Math.abs(hawk.y - 10) < 4) {
+            spawnHawk();
+        }
+    }
+
+    function drawElements() {
+        // Clear canvas
+        ctx.fillStyle = "#12000d";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Retro Grid lines (Subtle Pink)
+        ctx.strokeStyle = "#380027";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < tileCount; i++) {
+            ctx.beginPath();
+            ctx.moveTo(i * gridSize, 0);
+            ctx.lineTo(i * gridSize, canvas.height);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, i * gridSize);
+            ctx.lineTo(canvas.width, i * gridSize);
+            ctx.stroke();
+        }
+
+        // Draw Apple (Electric Cyan for bright retro pop against the pink background)
+        ctx.fillStyle = varColor('--apple-color');
+        ctx.fillRect(apple.x * gridSize + 2, apple.y * gridSize + 2, gridSize - 4, gridSize - 4);
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(apple.x * gridSize + 6, apple.y * gridSize + 4, 4, 4); 
+
+        // Draw Hawk (Laser Yellow)
+        ctx.fillStyle = varColor('--hawk-color');
+        ctx.beginPath();
+        let centerX = hawk.x * gridSize + gridSize/2;
+        let centerY = hawk.y * gridSize + gridSize/2;
+        ctx.arc(centerX, centerY, gridSize/2 - 2, 0, 2 * Math.PI);
+        ctx.fill();
+        // Hawk Wing details
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(hawk.x * gridSize + 2, hawk.y * gridSize + 8, 4, 4);
+        ctx.fillRect(hawk.x * gridSize + 14, hawk.y * gridSize + 8, 4, 4);
+
+        // Draw Neon Pink Snake
+        snake.forEach((part, index) => {
+            if (index === 0) {
+                ctx.fillStyle = "#ffffff"; // Hot white glow head
+            } else {
+                ctx.fillStyle = varColor('--snake-color');
+            }
+            ctx.fillRect(part.x * gridSize + 1, part.y * gridSize + 1, gridSize - 2, gridSize - 2);
+            
+            // Retro internal block pattern
+            if (index > 0) {
+                ctx.fillStyle = "#12000d";
+                ctx.fillRect(part.x * gridSize + 7, part.y * gridSize + 7, 6, 6);
+            }
+        });
+    }
+
+    function varColor(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function triggerGameOver(reason) {
+        gameOverState = true;
+        clearInterval(gameInterval);
+        failReason.innerText = reason;
+        gameoverScreen.style.display = "flex";
+    }
+
+    function triggerVictory() {
+        gameOverState = true;
+        clearInterval(gameInterval);
+        victoryScreen.style.display = "flex";
+    }
+
+    function handleKeyDown(e) {
+        if(["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
+            e.preventDefault();
+        }
+
+        if (!gameStarted && ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
+            gameStarted = true;
+            startScreen.style.display = "none";
+        }
+
+        if (gameOverState && e.code === "Space") {
+            gameOverState = false;
+            resetGame();
+            return;
+        }
+
+        switch (e.code) {
+            case "ArrowUp":
+                if (dy === 1) break;
+                dx = 0; dy = -1;
+                break;
+            case "ArrowDown":
+                if (dy === -1) break;
+                dx = 0; dy = 1;
+                break;
+            case "ArrowLeft":
+                if (dx === 1) break;
+                dx = -1; dy = 0;
+                break;
+            case "ArrowRight":
+                if (dx === -1) break;
+                dx = 1; dy = 0;
+                break;
+        }
+    }
+</script>
+
+</body>
+</html>

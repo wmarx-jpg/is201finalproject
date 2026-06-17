@@ -1,0 +1,36 @@
+body{
+    background-color:lavender;
+    font-family:arial;
+}
+h1{
+    color:white;
+    background-color:purple;
+    text-align:center;
+}
+h2{
+    color:darkblue;
+    text-align: center;
+}
+.left{
+    font-weight:bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+.center{
+    font-style:italic;
+    text-decoration:underline;
+    text-align:center;
+}
+.right{
+    text-align:right;
+    background-color:white;
+    border:2px solid black;
+}
+
+
+
+
+
+
+
+
+
