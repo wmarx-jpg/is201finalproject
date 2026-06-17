@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>William Marx | BYU Accounting Portfolio</title>
+    <style>
+        :root {
+            --byu-navy: #002e5d;
+            --byu-accent: #c5a059;
+            --bg-light: #fdfdfd;
+            --text-main: #2d3436;
+            --white: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Garamond', serif, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Hero Header Section */
+        .hero {
+            background-color: var(--byu-navy);
+            width: 100%;
+            padding: 5rem 1rem 4rem 1rem;
+            text-align: center;
+            color: var(--white);
+            border-bottom: 8px solid var(--byu-accent);
+        }
+
+        /* Symmetrical Circular Photo Container */
+        .photo-frame {
+            width: 320px;
+            height: 320px;
+            margin: 0 auto 2rem auto;
+            border-radius: 50%;
+            border: 6px solid var(--white);
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background-color: var(--white);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--byu-accent);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Symmetrical Content Layout */
+        .container {
+            max-width: 950px;
+            width: 100%;
+            padding: 2rem 2rem 5rem 2rem;
+            text-align: center;
+        }
+
+        .section-header {
+            color: var(--byu-navy);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 1.6rem;
+            margin: 4rem 0 1.5rem 0;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--byu-accent);
+            margin: 0.5rem auto 0 auto;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+
+        .item-title {
+            font-weight: bold;
+            font-size: 1.4rem;
+            color: var(--byu-navy);
+        }
+
+        .item-subtitle {
+            font-style: italic;
+            color: #555;
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        .metrics-row {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .pill {
+            background-color: #f1f5f9;
+            color: var(--byu-navy);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid #cbd5e1;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.05rem;
+            color: #333;
+        }
+
+        li::before {
+            content: "▪";
+            position: absolute;
+            left: 0;
+            color: var(--byu-accent);
+            font-size: 1.2rem;
+        }
+
+        /* Grid Framework for Skills, Awards & Interests */
+        .grid-two-col {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .mini-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            text-align: left;
+        }
+
+        .mini-card h3 {
+            color: var(--byu-navy);
+            font-size: 1.25rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer & Contact Architecture */
+        footer {
+            margin-top: auto;
+            padding: 4rem 2rem;
+            background: #f1f5f9;
+            width: 100%;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #555;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .contact-bar {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .contact-bar a {
+            color: var(--byu-navy);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .contact-bar a:hover {
+            color: var(--byu-accent);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Centered Hero -->
+    <header class="hero">
+        <div class="photo-frame">
+            <img src="Will Marx Professional Photo.jpg" alt="William Marx Professional Headshot">
+        </div>
+        <h1>William Marx</h1>
+        <p>Pre-Accounting Student | Marriott School of Business</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Education Section -->
+        <h2 class="section-header">Education</h2>
+        <div class="card">
+            <div class="item-title">Brigham Young University – Marriott School of Business</div>
+            <div class="item-subtitle">Bachelor of Science in Accounting | Graduation: Apr 2029</div>
+            
+            <div class="metrics-row">
+                <span class="pill">GPA 4.00 / 4.00</span>
+                <span class="pill">ACT 34 / 36</span>
+                <span class="pill">Brigham Young Scholarship</span>
+                <span class="pill">Member of BYU Accounting Society</span>
+            </div>
+            
+            <div style="border-top: 1px solid #f1f5f9; margin-top: 1.5rem; padding-top: 1.5rem;">
+                <div class="item-title" style="font-size: 1.15rem;">Woods Cross High School</div>
+                <div class="item-subtitle" style="margin-bottom: 0;">High School Diploma Concluded</div>
+            </div>
+        </div>
+
+        <!-- Professional Experience Section -->
+        <h2 class="section-header">Professional Experience</h2>
+
+        <div class="card" style="border-left: 4px solid var(--byu-accent);">
+            <div class="item-title">North Peak Services</div>
+            <div class="item-subtitle">Incoming Bookkeeping Intern | Incoming 2026</div>
+            <ul>
+                <li>Preparing to manage transactional record-keeping, ledger updates, and operational financial tracking.</li>
+                <li>Developing refined accounting data workflows to assist business lines with corporate tracking.</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <div class="item-title">Philippines Cebu East Mission</div>
+            <div class="item-subtitle">Assistant Housing Specialist | Feb 2025 – Jul 2025</div>
+            <ul>
+                <li>Transported and purchased necessary household items for an organization of over 140 volunteer representatives.</li>
+                <li>Negotiated 4 apartment leases on behalf of organization in Cebuano language, properly addressing any concerns discussed by landlords and developing real estate skills.</li>
+                <li>Learned inventory management by tracking surplus household items deemed unusable by representatives.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="item-title">Dick’s Market - Bountiful</div>
+            <div class="item-subtitle">Produce Clerk | Jun 2022 – Aug 2022</div>
+            <ul>
+                <li>Ensured proper display and organization of fruits and vegetables, working an average of 30 hours per week.</li>
+                <li>Displayed a variety of necessary skills, including proper workplace etiquette and effective communication.</li>
+                <li>Sought customer satisfaction and employer satisfaction through necessary attention to detail.</li>
+            </ul>
+        </div>
+
+        <!-- Leadership & Ventures Section -->
+        <h2 class="section-header">Leadership & Ventures</h2>
+
+        <div class="card" style="border-left: 4px solid var(--byu-navy);">
+            <div class="item-title">Healthcare Financial Consulting Venture</div>
+            <div class="item-subtitle">Co-Founder & Financial Partner | Launching 2026</div>
+            <ul>
+                <li>Partnering with a practicing surgeon to establish a specialized financial consulting firm tailored exclusively to medical practices.</li>
+                <li>Designing structural frameworks to optimize revenue cycles, analyze clinical operational costs, and maximize firm profitability.</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <div class="item-title">The Church of Jesus Christ of Latter-day Saints</div>
+            <div class="item-subtitle">Volunteer Representative (Cebu, Philippines) | Sep 2023 – July 2025</div>
+            <ul>
+                <li>Taught an average of 15 lessons per week about Jesus Christ to people of Cebu and Bohol in Cebuano language.</li>
+                <li>Utilized door-to-door techniques to meet an average of 25 new people per day.</li>
+                <li>Engaged in nearly 10 community service projects, such as landscaping and housecleaning for underprivileged individuals and families.</li>
+                <li>Practiced lesson planning and daily planning for daily activities.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="item-title">Woods Cross High School Varsity Men’s Lacrosse</div>
+            <div class="item-subtitle">Team Captain | Aug 2022 – May 2023</div>
+            <ul>
+                <li>Convened regularly with coaching staff to discuss winning strategies and proper ways to resolve team problems.</li>
+                <li>Motivated a team of over 40 lacrosse players in training drills, displaying vital leadership and communication skills to ensure team unity and success.</li>
+                <li>Represented team to overall student body, encouraging participation from other students.</li>
+                <li>Led a recruitment effort to increase participation and overall strength of team.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="item-title">Woods Cross High School HOSA Future Health Professionals Club</div>
+            <div class="item-subtitle">Vice President of Blood Drives | Aug 2022 – May 2023</div>
+            <ul>
+                <li>Publicized blood drives operated by ARUP Blood Services, assisted by Woods Cross High School HOSA club members, to entirety of Woods Cross High School student body.</li>
+                <li>Organized 4 school-wide blood drives operated by ARUP Blood Services.</li>
+            </ul>
+        </div>
+
+        <!-- Awards, Skills & Interests Split Grid -->
+        <h2 class="section-header">Awards, Skills & Interests</h2>
+        <div class="grid-two-col">
+            
+            <div class="mini-card">
+                <h3>Technical Toolstack & Analytics</h3>
+                <ul>
+                    <li><strong>VBA:</strong> Engineering custom automation scripts and financial database macros within Excel.</li>
+                    <li><strong>SQL:</strong> Designing structural data queries for database management and transactional validation.</li>
+                    <li><strong>Tableau:</strong> Constructing interactive data visualizations and executive financial reporting dashboards.</li>
+                    <li><strong>Visual Studio:</strong> Utilizing complete IDE environments for modern web design and development workflows.</li>
+                </ul>
+            </div>
+
+            <div class="mini-card">
+                <h3>Core Competencies</h3>
+                <ul>
+                    <li><strong>Languages:</strong> Cebuano (Limited working proficiency)</li>
+                    <li>Eagle Scout, Boy Scouts of America</li>
+                    <li>1st Dan Black Belt, Masters Taekwondo Academy</li>
+                </ul>
+            </div>
+
+            <div class="mini-card">
+                <h3>DECA & Academic Awards</h3>
+                <ul>
+                    <li><strong>2nd Place</strong> - Utah State DECA Individual Human Resources Competition (2023) — Qualified for DECA National Competition</li>
+                    <li><strong>3rd Place</strong> - Utah State DECA Team Entrepreneurship Competition (2022) — Qualified for DECA National Competition</li>
+                    <li>Career and Technical Education (CTE) Student of the Year at Woods Cross High School (2023)</li>
+                </ul>
+            </div>
+
+            <div class="mini-card">
+                <h3>Athletic Achievements</h3>
+                <ul>
+                    <li><strong>2023 Woods Cross Lacrosse Team MVP</strong> — Led team in goals scored</li>
+                    <li><strong>2022 Woods Cross Lacrosse Team Offensive MVP</strong> — Led team in goals scored</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Contact Navigation Bar & Footer -->
+    <footer>
+        <div class="contact-bar">
+            <a href="https://www.linkedin.com/in/william-marx-ba2394373" target="_blank">LinkedIn Profile</a>
+            <a href="mailto:wmarx8@gmail.com">wmarx8@gmail.com</a>
+            <a href="tel:3855036480">(385) 503-6480</a>
+        </div>
+        <p>&copy; 2026 William Marx. All Rights Reserved.</p>
+        <p style="font-size: 0.85rem; color: #777; margin-top: 0.5rem;">Provo, Utah | Marriott School of Business Candidate</p>
+    </footer>
+
+</body>
+</html>
